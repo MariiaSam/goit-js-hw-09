@@ -15,18 +15,18 @@ function getRandomHexColor() {
 btnStop.disabled = true;
 
 function handlerStart () {
-    btnStop.disabled = true;
+    btnStart.disabled = true;
     btnStop.disabled = false;
 
     intervalColor = setInterval(() => {
-        bodyColor = getRandomHexColor()
+        bodyColor.style.background = getRandomHexColor()
     }, 1000);
 }
 
 function handlerStop () {
     clearInterval(intervalColor);
 
-    btnStop.disabled = false;
+    btnStart.disabled = false;
     btnStop.disabled = true;
 }
 
