@@ -32,7 +32,7 @@ function handlePromiseCreate(evt) {
   for (let i = 1; i <= amount; i+=1) {
     let promiseDelay = valueDelay + step * i;
 
-    createPromise(position, promiseDelay)
+    createPromise(i, promiseDelay)
       .then(({ position, delay }) => {
         Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
       })
