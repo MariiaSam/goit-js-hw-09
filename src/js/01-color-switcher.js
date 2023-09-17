@@ -12,23 +12,24 @@ function getRandomHexColor() {
     .toString(16)
     .padStart(6, 0)}`;
 }
-
-btnStop.disabled = true;
-
-function handlerStart () {
-    btnStart.disabled = true;
-    btnStop.disabled = false;
-    
-    intervalColor = setInterval(() => {
-        bodyColor.style.background = getRandomHexColor()
-    }, 1000);
+// виношу два занчення в окрему функцію
+function btnState() { // || (startDisabled)
+  btnStart.disabled = true; // || startDisabled
+  btnStop.disabled = !true; //|| !startDisabled вик-ю інверсію
 }
 
-function handlerStop () {
-    btnStart.disabled = false;
-    btnStop.disabled = true;
-    
-    clearInterval(intervalColor);
+// || btnState(true); // початковий стан
+
+function handlerStart() {
+  btnState(true);
+
+  intervalColor = setInterval(() => {
+    bodyColor.style.background = getRandomHexColor();
+  }, 1000);
 }
 
+function handlerStop() {
+  btnState(!true); //|| (false)
 
+  clearInterval(intervalColor);
+}
