@@ -29,7 +29,7 @@ function handlerStart() {
 }
 
 function handlerStop() {
-  btnState(!true); //|| (false)
+  btnState(false); 
 
   clearInterval(intervalColor);
 }
