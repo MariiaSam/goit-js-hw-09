@@ -4,28 +4,10 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
 const startBtn = document.querySelector('button[data-start]');
+const timerField = document.querySelectorAll('.value');
+
 startBtn.disabled = true;
 
-
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  onClose(selectedDates) {
-    const selectedDate = selectedDates[0];
-    const currentDate = new Date();
-
-    if (selectedDate <= currentDate) {
-      Notiflix.Notify.failure('Please, choose a date in the future');
-    } else {
-      startBtn.addEventListener('click', startTimer);
-      startBtn.disabled = false;
-    }
-  },
-};
-
-const flatpickCalendar = flatpickr('#datetime-picker', options);
 
 function convertMs(ms) {
   const second = 1000;
@@ -45,14 +27,9 @@ function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
 
-function startTimer() {
-  startBtn.disabled = true;
-  const timerField = document.querySelectorAll('.value');
-  const endTime = flatpickCalendar.selectedDates[0].getTime();
-
-
 function updateTimer() {
-  const currentDate = new Date().getTime();
+  const currentDate = Date.now();
+  const endTime = flatpickCalendar.selectedDates[0].getTime();
   const remTime = endTime - currentDate;
 
   if (remTime <= 0) {
@@ -69,6 +46,34 @@ timerField[2].textContent = addLeadingZero(minutes);
 timerField[3].textContent = addLeadingZero(seconds);
 }
 
-const timerInterval = setInterval(updateTimer, 1000);
-}
 
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: Date.now(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    const selectedDate = selectedDates[0];
+    const currentDate = Date.now();
+
+    if (selectedDate <= currentDate) {
+      Notiflix.Notify.failure('Please, choose a date in the future');
+      startBtn.disabled = true;
+
+    } else {
+      startBtn.disabled = false;
+    }
+  },
+};
+
+const flatpickCalendar = flatpickr('#datetime-picker', options);
+
+let timerInterval;
+
+startBtn.addEventListener('click', startTimer)
+
+
+function startTimer() {
+  startBtn.disabled = true;
+  timerInterval = setInterval(updateTimer, 1000);
+}
