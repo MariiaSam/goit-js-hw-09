@@ -8,7 +8,6 @@ const timerField = document.querySelectorAll('.value');
 
 startBtn.disabled = true;
 
-
 function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
@@ -27,6 +26,13 @@ function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
 
+function updateTimerFields({ days, hours, minutes, seconds }) {
+  timerField[0].textContent = addLeadingZero(days);
+  timerField[1].textContent = addLeadingZero(hours);
+  timerField[2].textContent = addLeadingZero(minutes);
+  timerField[3].textContent = addLeadingZero(seconds);
+}
+
 function updateTimer() {
   const currentDate = Date.now();
   const endTime = flatpickCalendar.selectedDates[0].getTime();
@@ -34,18 +40,13 @@ function updateTimer() {
 
   if (remTime <= 0) {
     clearInterval(timerInterval);
-    timerField.forEach(field => (field.textContent = '00'));
+    updateTimerFields({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     return;
   }
 
-const { days, hours, minutes, seconds } = convertMs(remTime);
-
-timerField[0].textContent = addLeadingZero(days);
-timerField[1].textContent = addLeadingZero(hours);
-timerField[2].textContent = addLeadingZero(minutes);
-timerField[3].textContent = addLeadingZero(seconds);
+  const { days, hours, minutes, seconds } = convertMs(remTime);
+  updateTimerFields({ days, hours, minutes, seconds });
 }
-
 
 const options = {
   enableTime: true,
@@ -59,7 +60,6 @@ const options = {
     if (selectedDate <= currentDate) {
       Notiflix.Notify.failure('Please, choose a date in the future');
       startBtn.disabled = true;
-
     } else {
       startBtn.disabled = false;
     }
@@ -70,8 +70,7 @@ const flatpickCalendar = flatpickr('#datetime-picker', options);
 
 let timerInterval;
 
-startBtn.addEventListener('click', startTimer)
-
+startBtn.addEventListener('click', startTimer);
 
 function startTimer() {
   startBtn.disabled = true;
